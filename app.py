@@ -11,6 +11,7 @@ import plotly.figure_factory as ff
 import plotly.colors as pc
 import plotly.io as pio
 import io
+import matplotlib.pyplot as plt
 from io import BytesIO
 from docx import Document
 from docx.shared import Pt, Inches
@@ -970,10 +971,8 @@ def create_comprehensive_report_with_graphs(df, filtered_df, current_min_speed, 
     fig_total.add_trace(go.Scatter(x=chart_data.index, y=chart_data['speed'], mode='lines', name='Speed (RPM)'))
     fig_total.update_layout(title="Machine Speed Over Time", xaxis_title="Time", yaxis_title="Speed (RPM)")
     
-    
-import matplotlib.pyplot as plt
-fig_total_mat = plt.figure()
-plt.plot(chart_data.index, chart_data['speed'], label='Speed (RPM)')
+    fig_total_mat = plt.figure()
+plt.plot(chart_data.index, chart_data["speed"], label="Speed (RPM)")
 plt.title("Machine Speed Over Time")
 plt.xlabel("Time")
 plt.ylabel("Speed (RPM)")
@@ -984,7 +983,6 @@ tmp_img_path = "/tmp/fig_total.png"
 fig_total_mat.savefig(tmp_img_path)
 plt.close(fig_total_mat)
 doc.add_picture(tmp_img_path, width=Inches(6))
-
     doc.add_picture(io.BytesIO(img_bytes), width=Inches(6))
     doc.add_paragraph()
 
