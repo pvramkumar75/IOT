@@ -970,7 +970,21 @@ def create_comprehensive_report_with_graphs(df, filtered_df, current_min_speed, 
     fig_total.add_trace(go.Scatter(x=chart_data.index, y=chart_data['speed'], mode='lines', name='Speed (RPM)'))
     fig_total.update_layout(title="Machine Speed Over Time", xaxis_title="Time", yaxis_title="Speed (RPM)")
     
-    img_bytes = pio.to_image(fig_total, format="png", engine="kaleido")
+    
+import matplotlib.pyplot as plt
+fig_total_mat = plt.figure()
+plt.plot(chart_data.index, chart_data['speed'], label='Speed (RPM)')
+plt.title("Machine Speed Over Time")
+plt.xlabel("Time")
+plt.ylabel("Speed (RPM)")
+plt.xticks(rotation=45)
+plt.tight_layout()
+plt.legend()
+tmp_img_path = "/tmp/fig_total.png"
+fig_total_mat.savefig(tmp_img_path)
+plt.close(fig_total_mat)
+doc.add_picture(tmp_img_path, width=Inches(6))
+
     doc.add_picture(io.BytesIO(img_bytes), width=Inches(6))
     doc.add_paragraph()
 
@@ -981,7 +995,7 @@ def create_comprehensive_report_with_graphs(df, filtered_df, current_min_speed, 
     fig_prod.add_trace(go.Scatter(x=production_chart_data.index, y=production_chart_data['quantity'], mode='lines', name='Production Quantity'))
     fig_prod.update_layout(title="Production Quantity Over Time", xaxis_title="Time", yaxis_title="Quantity")
     
-    img_bytes_prod = pio.to_image(fig_prod, format="png", engine="kaleido")
+    img_bytes_prod = pio.to_image(fig_prod, format="png")
     doc.add_picture(io.BytesIO(img_bytes_prod), width=Inches(6))
     doc.add_paragraph()
 
@@ -1029,7 +1043,7 @@ def create_comprehensive_report_with_graphs(df, filtered_df, current_min_speed, 
                     showgrid_x=True,
                     showgrid_y=True
                 )
-                img_bytes_gantt = pio.to_image(fig_gantt, format="png", engine="kaleido")
+                img_bytes_gantt = pio.to_image(fig_gantt, format="png")
                 doc.add_picture(io.BytesIO(img_bytes_gantt), width=Inches(6))
                 doc.add_paragraph()
             except Exception as e:
@@ -1046,7 +1060,7 @@ def create_comprehensive_report_with_graphs(df, filtered_df, current_min_speed, 
                         marker=dict(size=10)
                     ))
                 fig_alt.update_layout(title="Idle Events Timeline (Alternative View)", xaxis_title="Time", yaxis_title="Idle Groups")
-                img_bytes_alt = pio.to_image(fig_alt, format="png", engine="kaleido")
+                img_bytes_alt = pio.to_image(fig_alt, format="png")
                 doc.add_picture(io.BytesIO(img_bytes_alt), width=Inches(6))
                 doc.add_paragraph()
 
@@ -1061,7 +1075,7 @@ def create_comprehensive_report_with_graphs(df, filtered_df, current_min_speed, 
             marker_color='#ff6b6b'
         ))
         fig_duration.update_layout(title="Idle Event Durations by Group", xaxis_title="Idle Group", yaxis_title="Duration (minutes)")
-        img_bytes_duration = pio.to_image(fig_duration, format="png", engine="kaleido")
+        img_bytes_duration = pio.to_image(fig_duration, format="png")
         doc.add_picture(io.BytesIO(img_bytes_duration), width=Inches(6))
         doc.add_paragraph()
 
@@ -1086,7 +1100,7 @@ def create_comprehensive_report_with_graphs(df, filtered_df, current_min_speed, 
     hourly_chart_data_for_report = hourly_stats_for_report_df[['Avg_Speed', 'Uptime_Percent']].copy()
     fig_hourly = create_multi_bar_chart(hourly_chart_data_for_report, ['Avg_Speed', 'Uptime_Percent'],
                                          "Hourly Performance - Average Speed and Uptime")
-    img_bytes_hourly = pio.to_image(fig_hourly, format="png", engine="kaleido")
+    img_bytes_hourly = pio.to_image(fig_hourly, format="png")
     doc.add_picture(io.BytesIO(img_bytes_hourly), width=Inches(6))
     doc.add_paragraph()
 

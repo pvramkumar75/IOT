@@ -4,4 +4,4 @@ numpy
 requests
 plotly
 python-docx
-kaleido
+matplotlib
