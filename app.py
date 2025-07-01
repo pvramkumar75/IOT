@@ -970,7 +970,11 @@ def create_comprehensive_report_with_graphs(df, filtered_df, current_min_speed, 
     fig_total.add_trace(go.Scatter(x=chart_data.index, y=chart_data['speed'], mode='lines', name='Speed (RPM)'))
     fig_total.update_layout(title="Machine Speed Over Time", xaxis_title="Time", yaxis_title="Speed (RPM)")
     
-    img_bytes = pio.to_image(fig_total, format="png")
+    try:
+        img_bytes = pio.to_image(fig_total, format="png")
+    except Exception as e:
+        doc.add_paragraph("Unable to add chart: " + str(e))
+        return doc
     doc.add_picture(io.BytesIO(img_bytes), width=Inches(6))
     doc.add_paragraph()
 
